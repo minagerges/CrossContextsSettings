@@ -57,7 +57,7 @@ class SettingUpdateFromGridProcessor extends modObjectProcessor {
                 'key' => $props['key'],
                 'context_key' => $k,
             ));
-            if (!empty($v)) {
+            if (!empty($v) || $v === '0') {
                 if (!$setting) {
                     if (isset($props[$k])) {
                         $setting = $this->modx->newObject($this->classKey);
@@ -74,6 +74,9 @@ class SettingUpdateFromGridProcessor extends modObjectProcessor {
                             $this->modx->cacheManager->refresh(array('context_settings' => array('contexts' => '$k')));
                         }
                     }
+                    continue;
+                }
+                if($setting->get('value') === $props[$k]) { //Skip saving same value
                     continue;
                 }
                 $setting->set('value', $props[$k]);
