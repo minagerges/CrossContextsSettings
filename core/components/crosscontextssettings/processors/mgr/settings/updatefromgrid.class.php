@@ -70,6 +70,8 @@ class SettingUpdateFromGridProcessor extends modObjectProcessor {
                             $this->modx->log(modX::LOG_LEVEL_ERROR, __LINE__ . ': [CCS] ' . $message);
                             continue;
                             return $this->failure($message);
+                        } else {
+                            $this->modx->cacheManager->refresh(array('context_settings' => array('contexts' => '$k')));
                         }
                     }
                     continue;
@@ -80,10 +82,13 @@ class SettingUpdateFromGridProcessor extends modObjectProcessor {
                     $this->modx->log(modX::LOG_LEVEL_ERROR, __METHOD__ . ' ');
                     $this->modx->log(modX::LOG_LEVEL_ERROR, __LINE__ . ': [CCS] ' . $message);
                     return $this->failure($message);
+                } else {
+                    $this->modx->cacheManager->refresh(array('context_settings' => array('contexts' => '$k')));
                 }
             } else {
                 if ($setting) {
                     $setting->remove();
+                    $this->modx->cacheManager->refresh(array('context_settings' => array('contexts' => '$k')));
                 }
             }
         }
